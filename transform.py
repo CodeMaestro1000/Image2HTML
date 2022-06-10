@@ -1,12 +1,7 @@
-import cv2, imutils, os
-from skimage.filters.thresholding import threshold_local
-import numpy as np
+import cv2, imutils
 from four_point_transform import four_point_transform
 
-image_path = 'Test Images/test_img_11.jpg'
 
-# read in image
-image = cv2.imread(image_path)
 
 
 def nothing(x):
@@ -89,81 +84,3 @@ def get_top_down_view(image):
     
     warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
     return warped
-
-def get_shape_from_contours(contour):
-    shape = "unidentified"
-    contour_perimeter = cv2.arcLength(contour, True)
-    perimeter_approximation = cv2.approxPolyDP(contour, 0.04 * contour_perimeter, True) # common values for sigma (the second parameter) ranges btw 1 and 5%
-    
-    # if the shape is a triangle, it will have 3 vertices
-    if len(perimeter_approximation) == 3:
-        shape = "triangle"
-		# if the shape has 4 vertices, it is either a square or
-		# a rectangle
-    elif len(perimeter_approximation) == 4:
-		# compute the bounding box of the contour and use the
-		# bounding box to compute the aspect ratio
-        (_, _, w, h) = cv2.boundingRect(perimeter_approximation)
-        ar = w / float(h)
-		# a square will have an aspect ratio that is approximately
-		# equal to one, otherwise, the shape is a rectangle
-        shape = "square" if ar >= 0.95 and ar <= 1.05 else "rectangle"
-		# if the shape is a pentagon, it will have 5 vertices
-    elif len(perimeter_approximation) == 5:
-        shape = "pentagon"
-		# otherwise, we assume the shape is a circle
-    else:
-        shape = "circle"
-		# return the name of the shape
-    return shape
-
-def detect_shapes(image):
-    # load the image and resize it to a smaller factor so that
-    # the shapes can be approximated better
-    image = get_top_down_view(image)
-    resized = imutils.resize(image, width=300)
-    ratio = image.shape[0] / float(resized.shape[0])
-
-    # convert the resized image to grayscale, blur it slightly,
-    # and threshold it
-    # gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(resized, (5, 5), 0)
-    thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
-
-    # find contours in the thresholded image and initialize the
-    # shape detector
-    contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    contours = imutils.grab_contours(contours)
-
-    for c in contours:
-	# compute the center of the contour, then detect the name of the
-	# shape using only the contour
-        M = cv2.moments(c)
-        cX = int((M["m10"] / M["m00"]) * ratio)
-        cY = int((M["m01"] / M["m00"]) * ratio)
-        shape = get_shape_from_contours(c)
-        # multiply the contour (x, y)-coordinates by the resize ratio,
-        # then draw the contours and the name of the shape on the image
-        c = c.astype("float")
-        c *= ratio
-        c = c.astype("int")
-        cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
-        cv2.putText(image, shape, (cX, cY), cv2.FONT_HERSHEY_SIMPLEX,
-            0.5, (255, 255, 255), 2)
-
-    return image
-
-transformed_image = get_top_down_view(image)
-cv2.imwrite("output_3.jpg", transformed_image)
-
-"""
-cv2.namedWindow("Image")
-cv2.moveWindow("Image", 40, 30)
-cv2.namedWindow("Transformed")
-cv2.moveWindow("Transformed", 900, 30)
-
-os.system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "Python" to true' ''')
-cv2.imshow("Image", imutils.resize(original_image, height=500))
-cv2.imshow("Transformed", imutils.resize(image, height=500))
-cv2.waitKey(0)    """
-cv2.destroyAllWindows()

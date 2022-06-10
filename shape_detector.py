@@ -17,8 +17,8 @@ def detect_shapes(image):
     """
     image = imutils.resize(image, height = 500) # resize image to have a height of 500px
 
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(gray, (7, 7), 0) # applying a gaussian blur with a 7 x 7 kernel window to remove high freq noise from image to better detect edges
+    # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    gray = cv2.GaussianBlur(image, (7, 7), 0) # applying a gaussian blur with a 7 x 7 kernel window to remove high freq noise from image to better detect edges
     # for more info on gaussian blur, see here: https://pyimagesearch.com/2021/04/28/opencv-smoothing-and-blurring/
 
     # Applying adaptive thresholding using gaussian mean
@@ -63,16 +63,20 @@ def detect_shapes(image):
     
         perimeter_approx = cv2.approxPolyDP(c, 0.01 * contour_perimeter, True)
         if len(perimeter_approx) < 9: # allowance since freehand drawing 
-            _,_, w, h = cv2.boundingRect(c)
+            x, y, w, h = cv2.boundingRect(c)
             aspect_ratio = w/float(h)
             shape  = 'square' if aspect_ratio >= 0.9 and aspect_ratio <= 1.5 else 'rectangle' # can play around with the values for aspect ratio
             shape_data = {"shape": shape, "centroid": centroid, "width": w, "height": h }
-            
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255,0), 2)
+
         else:
             shape = 'circle'
             shape_data = {"shape": shape, "centroid": centroid, "width": None, "height": None}
+            cv2.drawContours(image, [perimeter_approx], -1, (0, 0, 255), 2)
         
-
+        cv2.circle(image, centroid, 2, (0, 0, 255), 4)
+        cv2.putText(image, shape, (centroid[0]+4, centroid[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+        
         difference = abs(centroid[1] - last_centroid[1]) # |y2 - y1|
         if difference <= delta:
             try:
@@ -83,5 +87,9 @@ def detect_shapes(image):
             try:
                 render_dict[f"row{rows}"].append(shape_data)
             except: render_dict[f"row{rows}"] = [shape_data]
-
+    
+    cv2.namedWindow("Shapes")
+    cv2.imshow("Shapes", image)
+    cv2.waitKey(0)
+    cv2.destroyWindow("Shapes")
     return render_dict
