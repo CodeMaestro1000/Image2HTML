@@ -1,0 +1,8 @@
+__pycache__/
+Test Images/
+test_results/
+output_2.jpg
+output_3.jpg
+test.py
+.DS_Store
+documentation.txt
