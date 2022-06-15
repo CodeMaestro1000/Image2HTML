@@ -20,16 +20,16 @@ def generate_output_html(data, filename):
         filename += ".html"
 
     for keys in data.keys():
+        form_data += """\n\t\t\t<div class="row mb-3">"""
         for element in data[keys]:
             input_data = rendering_data[element['shape']]['input_type']
-        form_data += f"""\n
-            <div class="row mb-3">
-                <label for="" class="form-label">{rendering_data[element['shape']]['name']}</label>
-                <div class="col-12">
+            form_data += f"""
+                <div class="col">
+                    <label for="" class="form-label">{rendering_data[element['shape']]['name']}</label>
                     {input_data}
                 </div>
-            </div>
-    """
+            """
+        form_data +=  '</div>'
 
     html = f"""
         <!doctype html>
@@ -72,25 +72,4 @@ def generate_output_html(data, filename):
 
     with open(f"{filename}", "w") as out_file:
         out_file.write(html)
-    
-
-
-"""data = {
-    'row0': [{'shape': 'rectangle', 'centroid': (185, 36), 'width': 334, 'height': 34}], 
-    'row1': [{'shape': 'square', 'centroid': (58, 98), 'width': 55, 'height': 39}], 
-    'row2': [{'shape': 'rectangle', 'centroid': (109, 173), 'width': 177, 'height': 39}], 
-    'row3': [{'shape': 'rectangle', 'centroid': (75, 238), 'width': 106, 'height': 33}], 
-    'row4': [{'shape': 'circle', 'centroid': (48, 299), 'width': None, 'height': None}], 
-    'row5': [{'shape': 'circle', 'centroid': (41, 350), 'width': None, 'height': None}], 
-    'row6': [{'shape': 'circle', 'centroid': (40, 380), 'width': None, 'height': None}], 
-    'row7': [{'shape': 'circle', 'centroid': (43, 422), 'width': None, 'height': None}]
-}
-
-data2 = {
-    'row0': [{'shape': 'rectangle', 'centroid': (147, 57), 'width': 184, 'height': 38}], 
-    'row1': [{'shape': 'square', 'centroid': (124, 168), 'width': 138, 'height': 111}], 
-    'row2': [{'shape': 'circle', 'centroid': (107, 301), 'width': None, 'height': None}]
-}
-
-generate_output_html(data, "output")"""
 

@@ -1,13 +1,15 @@
 import cv2, imutils
 from four_point_transform import four_point_transform
+import logging
 
-
-
+logging.basicConfig(level=logging.WARNING)
 
 def nothing(x):
     pass
 
-def get_top_down_view(image):
+
+def get_top_down_view(image, show_output=True):
+    outline = None
     original_image = image.copy()
     ratio = image.shape[0] / 500.0 # maintain aspect ratio for further processing
      # keep a copy of the original image
@@ -17,21 +19,21 @@ def get_top_down_view(image):
     gray = cv2.GaussianBlur(gray, (5, 5), 0) # applying a gaussian blur with a 5 x 5 kernel window to remove high freq noise from image to better detect edges
     # for more info on gaussian blur, see here: https://pyimagesearch.com/2021/04/28/opencv-smoothing-and-blurring/
 
-    cv2.namedWindow("Edge Detection")
-    cv2.createTrackbar("lower", "Edge Detection", 75, 100, nothing)
-    cv2.createTrackbar("upper", "Edge Detection", 200, 400, nothing)
-    
     edged = cv2.Canny(gray, 75, 200)
     # see info on edge detection here: https://pyimagesearch.com/2021/05/12/opencv-edge-detection-cv2-canny/
 
-    while True:
-        cv2.imshow("Edge Detection", edged)
-        upper = cv2.getTrackbarPos("upper", "Edge Detection")
-        lower = cv2.getTrackbarPos("lower", "Edge Detection")
-        edged = cv2.Canny(gray, lower, upper)
-        if cv2.waitKey(1) == ord('q'):
-            break
-    cv2.destroyWindow("Edge Detection")
+    if show_output:
+        cv2.namedWindow("Edge Detection")
+        cv2.createTrackbar("lower", "Edge Detection", 75, 100, nothing)
+        cv2.createTrackbar("upper", "Edge Detection", 200, 400, nothing)
+        while True:
+            cv2.imshow("Edge Detection", edged)
+            upper = cv2.getTrackbarPos("upper", "Edge Detection")
+            lower = cv2.getTrackbarPos("lower", "Edge Detection")
+            edged = cv2.Canny(gray, lower, upper)
+            if cv2.waitKey(1) == ord('q'):
+                break
+        cv2.destroyWindow("Edge Detection")
     
     # find contours in edge detected image and use this contours to get the full outline of the paper
     contours = cv2.findContours(edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -72,15 +74,19 @@ def get_top_down_view(image):
     We then apply thresholding to To obtain the black and white feel to the image, we then take the warped image, 
     convert it to grayscale and apply adaptive thresholding on
     """
+    if outline is None:
+        logging.warning("NO OUTLINE DETECTED!!!")
+        return None
 
-    cv2.drawContours(image, [outline], -1, (0, 255, 0), 2) # -1 parameter is to draw all contours, (0, 255, 0) is color, 2 is thickness
-    # apply transform to original image and resize the outline based on the pre-computed aspect ratio
+    if show_output:
+        cv2.drawContours(image, [outline], -1, (0, 255, 0), 2) # -1 parameter is to draw all contours, (0, 255, 0) is color, 2 is thickness
+        # apply transform to original image and resize the outline based on the pre-computed aspect ratio
 
-    cv2.namedWindow("Paper Outline")
-    cv2.imshow("Paper Outline", image)
-    cv2.waitKey(0)
-    cv2.destroyWindow("Paper Outline")
-    warped = four_point_transform(original_image, outline.reshape(4, 2) * ratio)
+        cv2.namedWindow("Paper Outline")
+        cv2.imshow("Paper Outline", image)
+        cv2.waitKey(0)
+        cv2.destroyWindow("Paper Outline")
     
+    warped = four_point_transform(original_image, outline.reshape(4, 2) * ratio)
     warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
     return warped
