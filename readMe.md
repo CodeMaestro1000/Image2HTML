@@ -4,7 +4,7 @@ This project uses computer vision to detect shapes in images and using these sha
 
 ## How to use
 - Specify an input image in main.py or use one of the images in the `Test Images` folder. Using the below image as an example:
-![Test Image](https://drive.google.com/uc?export=view&id=1tHPq3dQA1Vei8iZ5ubcrQccWUWIdevtu)
+![Test Image](https://drive.google.com/uc?export=view&id=14n4Qu-R2I7I46ke8-_FGz5rfQOl1hfK6)
 - Run the `main.py` file.
 
 ### Edge Detection
@@ -16,7 +16,7 @@ This project uses computer vision to detect shapes in images and using these sha
 ![Outline Image](https://drive.google.com/uc?export=view&id=1v1pP9AaLBq90r7VUl3IKMKcp4-7dMVOW)
 
 ### Obtain a top-down view of the paper in the image
-![Top Down Image](https://drive.google.com/uc?export=view&id=1fGwDTPp8cjxWsgpRtiSnhYc0zwMD-Wtm)
+![Top Down Image](https://drive.google.com/uc?export=view&id=1pShAXVjlZ-UgfPoIy9jiwkqUY41ybep3)
 
 ### Detect Shapes
 - Preview all detected shapes
