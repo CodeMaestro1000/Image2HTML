@@ -10,7 +10,8 @@ Specify an input image in main.py or use one of the images in the `Test Images` 
 Run the `main.py` file.
 
 ### Edge Detection
-Use the trackbars to tune the values for edge detection until you can see the paper clearly as in the image below:
+Use the trackbars to tune the values for edge detection until you can see the paper clearly as in the image below
+
 ![Edge Detection Image](https://drive.google.com/uc?export=view&id=1-q4wJ2qX_yhpXqUnFlba78gG87ZYUw9o)
 
 ### Outline
@@ -19,6 +20,7 @@ Enusre that the outline highlighted in green is the entire paper.
 ![Outline Image](https://drive.google.com/uc?export=view&id=1v1pP9AaLBq90r7VUl3IKMKcp4-7dMVOW)
 
 ### Obtain a top-down view of the paper in the image
+
 ![Top Down Image](https://drive.google.com/uc?export=view&id=1pShAXVjlZ-UgfPoIy9jiwkqUY41ybep3)
 
 ### Detect Shapes
@@ -27,6 +29,7 @@ Preview all detected shapes
 ![Shape Detection Image](https://drive.google.com/uc?export=view&id=1zRh5VxHSRZJQFNhBqlXgmq89M4dvMcRQ)
 
 ### Output
+
 ![Output HTML Image](https://drive.google.com/uc?export=view&id=1Kpu6uCXh-Pkz02wXDRyqeGQ6KXTLozGt)
 
 
