@@ -3,16 +3,16 @@
 This project uses computer vision to detect shapes in images and using these shapes to generate html forms styled with bootstrap css.
 
 ## How to use
-- Specify an input image in main.py or use one of the images in the `Test Images` folder. Using the below image as an example:
+Specify an input image in main.py or use one of the images in the `Test Images` folder. Using the below image as an example:
 ![Test Image](https://drive.google.com/uc?export=view&id=14n4Qu-R2I7I46ke8-_FGz5rfQOl1hfK6)
-- Run the `main.py` file.
+Run the `main.py` file.
 
 ### Edge Detection
-- Use the trackbars to tune the values for edge detection until you can see the paper clearly as in the image below:
+Use the trackbars to tune the values for edge detection until you can see the paper clearly as in the image below:
 ![Edge Detection Image](https://drive.google.com/uc?export=view&id=1-q4wJ2qX_yhpXqUnFlba78gG87ZYUw9o)
 
 ### Outline
-- Enusre that the outline highlighted in green is the entire paper.
+Enusre that the outline highlighted in green is the entire paper.
 
 ![Outline Image](https://drive.google.com/uc?export=view&id=1v1pP9AaLBq90r7VUl3IKMKcp4-7dMVOW)
 
@@ -20,7 +20,7 @@ This project uses computer vision to detect shapes in images and using these sha
 ![Top Down Image](https://drive.google.com/uc?export=view&id=1pShAXVjlZ-UgfPoIy9jiwkqUY41ybep3)
 
 ### Detect Shapes
-- Preview all detected shapes
+Preview all detected shapes
 
 ![Shape Detection Image](https://drive.google.com/uc?export=view&id=1zRh5VxHSRZJQFNhBqlXgmq89M4dvMcRQ)
 
