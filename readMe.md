@@ -27,6 +27,7 @@ Preview all detected shapes
 ### Output
 ![Output HTML Image](https://drive.google.com/uc?export=view&id=1Kpu6uCXh-Pkz02wXDRyqeGQ6KXTLozGt)
 
+
 ### Important Notes
 The quality of the input image largely determines the performance of the application. To get the best results, please use a plain paper and a thick pen to draw.
 
