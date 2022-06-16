@@ -4,7 +4,7 @@ This project uses computer vision to detect shapes in images and using these sha
 
 ## How to use
 - Specify an input image in main.py or use one of the images in the `Test Images` folder. Using the below image as an example:
-![Test Image](https://drive.google.com/uc?export=view&id=1tHPq3dQA1Vei8iZ5ubcrQccWUWIdevtu/view?usp=sharing)
+![Test Image](https://drive.google.com/uc?export=view&id=1tHPq3dQA1Vei8iZ5ubcrQccWUWIdevtu)
 - Run the `main.py` file.
 
 ### Edge Detection
@@ -13,17 +13,17 @@ This project uses computer vision to detect shapes in images and using these sha
 
 ### Outline
 - Enusre that the outline highlighted in green is the entire paper.
-![Outline Image](https://drive.google.com/uc?export=view&id=1v1pP9AaLBq90r7VUl3IKMKcp4-7dMVOW/view?usp=sharing)
+![Outline Image](https://drive.google.com/uc?export=view&id=1v1pP9AaLBq90r7VUl3IKMKcp4-7dMVOW)
 
 ### Obtain a top-down view of the paper in the image
-![Top Down Image](https://drive.google.com/uc?export=view&id=1fGwDTPp8cjxWsgpRtiSnhYc0zwMD-Wtm/view?usp=sharing)
+![Top Down Image](https://drive.google.com/uc?export=view&id=1fGwDTPp8cjxWsgpRtiSnhYc0zwMD-Wtm)
 
 ### Detect Shapes
 - Preview all detected shapes
-![Shape Detection Image](https://drive.google.com/uc?export=view&id=1zRh5VxHSRZJQFNhBqlXgmq89M4dvMcRQ/view?usp=sharing)
+![Shape Detection Image](https://drive.google.com/uc?export=view&id=1zRh5VxHSRZJQFNhBqlXgmq89M4dvMcRQ/)
 
 ### Output
-![Output HTML Image](https://drive.google.com/uc?export=view&id=1Kpu6uCXh-Pkz02wXDRyqeGQ6KXTLozGt/view?usp=sharing)
+![Output HTML Image](https://drive.google.com/uc?export=view&id=1Kpu6uCXh-Pkz02wXDRyqeGQ6KXTLozGt)
 
 ### Important Notes
 The quality of the input image largely determines the performance of the application. To get the best results, please use a plain paper and a thick pen to draw.
