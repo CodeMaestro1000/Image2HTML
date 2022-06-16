@@ -21,7 +21,7 @@ This project uses computer vision to detect shapes in images and using these sha
 
 ### Detect Shapes
 - Preview all detected shapes
-![Shape Detection Image](https://drive.google.com/uc?export=view&id=1zRh5VxHSRZJQFNhBqlXgmq89M4dvMcRQ/)
+![Shape Detection Image](https://drive.google.com/uc?export=view&id=1zRh5VxHSRZJQFNhBqlXgmq89M4dvMcRQ)
 
 ### Output
 ![Output HTML Image](https://drive.google.com/uc?export=view&id=1Kpu6uCXh-Pkz02wXDRyqeGQ6KXTLozGt)
