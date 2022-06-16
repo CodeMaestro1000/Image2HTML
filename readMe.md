@@ -1,29 +1,35 @@
-This project is aimed at using computer vision to develop an application that can be used to convert images into html pages styled with css
+# Image2HTML
 
-How do I go about this:
-- Upload an image, perspective transform to get the paper
-- Shape and dimensions approximation to get the type of html element
-- create final html file
+This project uses computer vision to detect shapes in images and using these shapes to generate html forms styled with bootstrap css.
 
-Limitations:
-- type of paper (ideally a plain paper)
-- contrast issues
+## How to use
+- Specify an input image in main.py or use one of the images in the `Test Images` folder. Using the below image as an example:
+![Test Image](https://drive.google.com/uc?export=view&id=1tHPq3dQA1Vei8iZ5ubcrQccWUWIdevtu/view?usp=sharing)
+- Run the `main.py` file.
 
-Task 1:
-- isolate paper from background (using edge detection and thresholding)
-- Maybe contrast improvement
-- documentation
+### Edge Detection
+- Use the trackbars to tune the values for edge detection until you can see the paper clearly as in the image below:
+![Edge Detection Image](https://drive.google.com/uc?export=view&id=1-q4wJ2qX_yhpXqUnFlba78gG87ZYUw9o)
 
-Task 2:
-- shape detection for inputs, cards, radio buttons et al
-- shape detection with rounded corners (border radius)
-- text detection for labels or text inside elements
-- documentation
+### Outline
+- Enusre that the outline highlighted in green is the entire paper.
+![Outline Image](https://drive.google.com/uc?export=view&id=1v1pP9AaLBq90r7VUl3IKMKcp4-7dMVOW/view?usp=sharing)
 
-Task 3:
-- Generating html and css code based on results from shape detection task
-- documentation
+### Obtain a top-down view of the paper in the image
+![Top Down Image](https://drive.google.com/uc?export=view&id=1fGwDTPp8cjxWsgpRtiSnhYc0zwMD-Wtm/view?usp=sharing)
 
-Task 4:
-- providing an interface for users to test it out
-- documentation
+### Detect Shapes
+- Preview all detected shapes
+![Shape Detection Image](https://drive.google.com/uc?export=view&id=1zRh5VxHSRZJQFNhBqlXgmq89M4dvMcRQ/view?usp=sharing)
+
+### Output
+![Output HTML Image](https://drive.google.com/uc?export=view&id=1Kpu6uCXh-Pkz02wXDRyqeGQ6KXTLozGt/view?usp=sharing)
+
+### Important Notes
+The quality of the input image largely determines the performance of the application. To get the best results, please use a plain paper and a thick pen to draw.
+
+Also, to properly detect the outline of the paper, place the paper on a contrasting (relatively darker) background.
+
+Please see the documentation.txt file for more information on this application.
+
+CHEERS!!!

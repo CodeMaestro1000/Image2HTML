@@ -1,0 +1,154 @@
+This document gives an overview of how this application was built. The workflow of the application is as follows:
+1. Detect the paper (a.k.a the Region of Interest) in the image
+2. Detect all shapes drawn on the paper
+3. Use these shapes to create a inputs for a form
+
+
+1. Obtaining the Region of Interest:
+The first stage of the workflow is to detect and select only the region of interest (the paper in this case) from the input image and 
+transform it to give a top-down view. This step can be skipped if you don't need to crop the image but it is recommended you do so. To obtain
+useful results, it is recommended that you place the paper on a contrasting (dark) background before taking the photo.
+
+This first stage is further divided into three steps. Each step is part of the get_top_down_view function in the transform.py file. This 
+function  takes two inputs: the imput image and show_output_value which for choosing to display intermediate outputs. The steps are as 
+follows:
+
+A. Edge Detection
+An Edge is a sharp difference between pixel intensities. An edge occurs when there is a high contrast between neighbouring pixels in an image.
+This is why it is important to have a contrasting background and foreground (foreground implying the ROI)
+
+Edge detection was used here to detect the paper in the image. This step is a precursor to obtaining the outline of the paper in the image. 
+
+OpenCv's canny edge detection (cv2.Canny) function was used here. This function takes two parameters: an upper and lower threshold. 
+These two parameters are responsible for determining what an edge is. Gaussian smoothing was applied to the image to  remove high frequency 
+noise before edge detection was performed.
+
+See the following resources for more info on edge detection and gaussian smoothing:
+https://pyimagesearch.com/2021/04/28/opencv-smoothing-and-blurring/
+https://pyimagesearch.com/2015/04/06/zero-parameter-automatic-canny-edge-detection-with-python-and-opencv/
+https://pyimagesearch.com/2021/05/12/opencv-edge-detection-cv2-canny/
+
+
+B. Finding Contours
+A Contour can be seen as a curve joining continous points having the same colour or intensity. In our case, we can assume that the paper has
+relatively the same colour and intensity, hence the outline of the paper can be approximated to be a contour. Opencv findContours 
+(cv2.findContours) function was used to perform this task. It is important to note that several contours might be found when applying this 
+function, hence it is assumed that the paper is the most dominant part of the image. The focus of this step is to find the largest
+contour in the image and perform contour approximation to determine if that is the outline of the paper or not.
+
+Contour approximation simply put is the process of approximating the shape of a contour to another shape. This is done by reducing the
+number of vertices in the contour. This process was used to determine if the largest found contour was approximately a rectangle. If the 
+approximation is a rectangle, then it is assumed that we have found the outline of the paper.
+
+For more info on contours, see:
+https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html
+https://docs.opencv.org/4.x/d9/d8b/tutorial_py_contours_hierarchy.html
+https://pyimagesearch.com/2021/10/06/opencv-contour-approximation/
+
+
+C. Perspective Transform
+After finding the outline of the paper, the next step is to obtain a top-down view of the region of interest (the paper) of the image. 
+I feel this step is beneficial for shape approximation (which we'll discuss later) because it removes the need to worry about 
+the angle the image was captured from.
+
+This is done using the four_point_transform function created by Dr.Adrian Rosebrock (Ph.D) in four_point_transform.py.  After obtaining the
+top-down view, the final thing to do is to convert the image to grayscale as we don't need colors to find shapes.
+For more information on this process, please read this awesome article:
+https://pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
+
+The next stage is detecting and determining the shape(s) in the transformed image.
+
+
+2. Shape Detection
+After obtaining our region of interest, the next stage of the workflow is detecting shapes in the image. Before performing the shape 
+detection, the image should be converted to grayscale (if it is colored) and gaussian smoothing applied. I added this pre-processing step 
+just in case the first stage of the workflow was skipped. Everything done in this stage was implemented in the detect_shapes function in 
+shape_detector.py. This function takes three arguments: 
+a. the input image
+b. duplicate_threshold which is a value for flagging shapes as duplicates
+c. delta which a value used for placing shapes into rows.
+d. show_output which is a boolean value to indicate whether or not you wish the view intermediate outputs.
+
+Stage 2 has also been broken down into a number of steps. They are:
+
+A. Adaptive Thresholding:
+The first major step in this second stage is to apply adaptive thresholding to the image. Thresholding is a process for separating the 
+foreground (region of interest) of an image from the background. In our case, the shapes are the foreground and the rest of the paper is the
+background. Basically, the way thresholding works is that each pixel in an image is compared with a threshold value, if the pixel is less 
+than the  threshold value, the pixel is set to zero otherwise the pixel is set to a maximum value. This process produces a binary image
+(an image with pixels either set to zero or a maximum value). For our application, the maximum value is 255, hence we have a truly black and 
+white image.
+Adaptive thresholding works a little bit differently. It considers a small set of neighboring pixels at a time, computes T for that specific
+local region, and then performs the segmentation. This means that we'll obtain much better segmentation results especially as we're dealing
+with images that will be taken under different lighting conditions. The cv2.adaptiveThreshold function performs this thresholding. 
+
+For more info please see the following resources:
+https://pyimagesearch.com/2021/04/28/opencv-thresholding-cv2-threshold/
+https://pyimagesearch.com/2021/05/12/adaptive-thresholding-with-opencv-cv2-adaptivethreshold/
+https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
+
+B. Finding Shapes:
+The next step is to find the shapes in the binary image obtained from thresholding. This is done by contour approximation. Please see 
+section B in stage 1 for details on contours. 
+An important thing to note here is that the area was computed for all contours found using the cv2.contourArea function and any contour with
+an area less than 50 was discarded. This discarding was done to remove contours that may be as a result of noise in the image. Therefore, 
+extremely small shapes might be discarded but I personally experienced extremely satisfactory results by discarding the  contours with 
+smaller areas.
+
+Next, the centroids of each of the remaining contours are computed. The centroid is basically the (x, y)-coordinates of the center of a
+contour. These centroids are needed to obtain the relative positions of all the shapes detected in the image. The centroids need to be sorted
+in ascending order based on the y-coordinates so that the every shape detected is arranged relatively from top to bottom.
+
+After sorting the contours (detected shapes), the next step is to perform contour approximation to determine the type of shape that was
+detected. If the approximated perimeter for a contour is less than 9, it is assumed to be a quadilateral. The value 9 was selected based on a
+results of a series of personal tests. To put it briefly, since the shapes are freehand drawn, the approximations for quadilaterals can range
+anywhere from 4 to 8. When a quadilateral is detected, a bounding rectangle is obtained from the contour (using the cv2.boundingRect) 
+function. This rectangle is used to differentiate a square from a rectangle by computing the aspect ratio. contours with perimeter values
+greater than 9 are automatically assumed to be circles. For circles, the contour is drawn using cv2.drawContour.
+
+C. Positioning:
+After detecting the shapes, the next step is to sort them into rows and columns (matching most form layouts). This is done by computing the 
+difference between the y-components of the centroids. If the difference is less than a set threshold value (set to 5 by default, but can be 
+changed by specifying a different value for delta).
+
+After sorting the positions of the shapes, the final thing to do is to dedupe shapes that might have been detected more than once. This error
+may arise for different number of reasons but in my case, it was due to the type of pen used to draw. This de-duplication is done by 
+computing the difference between the x-components of the centroids in each row. If the difference is less than the value of 
+duplicate_threshold, it is assumed that a duplicate is found and one of the shapes will be discarded.
+
+After completing this step, it's time to move on to the next stage which is generating html forms with the detected shapes.
+
+3. Generating Forms:
+This is the final stage of the workflow. I've used bootstrap to handle creating and positioning the form inputs derived from the shape 
+detection stage. Before proceeding, I'd like to point out some assumptions that have been made:
+All rectangles are assumed to be text inputs, circles are radio buttons and squares are checkboxes. A nice improvement on this would be to
+create textarea input fields based on the rectangle dimensions.
+
+Moving on, the entire implementation of this stage can be found in the generate_output_html function in the form_generator.py file. This
+function takes two parameters: the shape data and the output filename.
+
+The steps in this stage are quite simple. Since the shape data is a dictionary with each row as a key and a list of shapes sorted from left
+to right, the input field generation process is fairly straightforward.
+First, we create a string with boilerplate html with bootstrap css and js included. Then for each row (which is a key in the shape dict), 
+create a parent div with class row (bootstrap class) and plae each shape in a child div with class col (Another bootstrap classs). This way, 
+all elements of a row are placed from left to right (depending on the amount of available space). Another potential improvement would be to 
+use the width of each shape in a row to determine the amount of column space it takes up.
+After placing the inputs, the final thing to do is to save the html to a file and we're all done. 
+
+Congratulations, we have a decent way of automatically creating forms.
+
+Credits:
+1. Adrian Rosebrock PhD, author of pyimagesearch blog (www.pyimagesearch.com). One of the best places to get computer vision resources.
+2. OpenCv 4.x documentation (https://docs.opencv.org/4.x/index.html)
+3. https://realpython.com/sorting-algorithms-python/
+4. All the unsung heroes of stackoverflow
+
+POTENTIAL IMPROVEMENTS:
+1. Improiving detection in lower contrast images
+2. Using shape dimensions to determine the type of input (specifically using rectangle height to determine text inputs vs textarea)
+3. Determining column width in output html based on shape width.
+4. Recognizing shapes with border radius.
+
+Feel free to add suggestions by creating pull requests. Cheers!!!
+
+
