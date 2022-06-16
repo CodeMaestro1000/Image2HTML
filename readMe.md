@@ -13,6 +13,7 @@ This project uses computer vision to detect shapes in images and using these sha
 
 ### Outline
 - Enusre that the outline highlighted in green is the entire paper.
+
 ![Outline Image](https://drive.google.com/uc?export=view&id=1v1pP9AaLBq90r7VUl3IKMKcp4-7dMVOW)
 
 ### Obtain a top-down view of the paper in the image
