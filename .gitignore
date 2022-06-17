@@ -9,7 +9,7 @@ output_2.jpg
 output_3.jpg
 test.py
 computer_generated_shapes_test.py
-detect_shapes.py
+shape_detector.py
 form_generator.py
 transform.py
 edge_threshold_test.py
