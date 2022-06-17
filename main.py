@@ -1,7 +1,5 @@
 import cv2
-from transform import get_top_down_view
-from shape_detector import detect_shapes
-from form_generator import generate_output_html
+from functions import get_top_down_view, detect_shapes, generate_output_html
 
 image_path = 'Test Images/test_img_7.jpg'
 output_filename = "test_output.html"

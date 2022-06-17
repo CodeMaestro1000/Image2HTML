@@ -8,5 +8,11 @@ test_results/
 output_2.jpg
 output_3.jpg
 test.py
+computer_generated_shapes_test.py
+detect_shapes.py
+form_generator.py
+transform.py
+edge_threshold_test.py
+four_point_transform.py
 .DS_Store
 *.html
