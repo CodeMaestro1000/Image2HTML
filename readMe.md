@@ -7,7 +7,9 @@ Specify an input image in main.py or use one of the images in the `Test Images` 
 
 ![Test Image](https://drive.google.com/uc?export=view&id=14n4Qu-R2I7I46ke8-_FGz5rfQOl1hfK6)
 
-Run the `main.py` file.
+Run using the command `python main.py -i <path-to-image> -o <path-to-output-file>` file.
+
+Run `python main.py --help` for more usage info.
 
 ### Edge Detection
 Use the trackbars to tune the values for edge detection until you can see the paper clearly as in the image below
