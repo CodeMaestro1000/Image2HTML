@@ -1,6 +1,6 @@
-import cv2, imutils
+import cv2, imutils, math, logging
 import numpy as np
-import logging
+
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -213,7 +213,10 @@ def detect_shapes(image, duplicate_threshold=6, delta=5, show_output=True):
         if len(perimeter_approx) < 9: # allowance since freehand drawing 
             x, y, w, h = cv2.boundingRect(c)
             aspect_ratio = w/float(h)
-            shape  = 'square' if aspect_ratio >= 0.9 and aspect_ratio <= 1.5 else 'rectangle' # can play around with the values for aspect ratio
+            if h >= 70:
+                shape = 'rectangle2'
+            else:
+                shape  = 'square' if aspect_ratio >= 0.9 and aspect_ratio <= 1.5 else 'rectangle1' # can play around with the values for aspect ratio
             shape_data = {"shape": shape, "centroid": centroid, "width": w, "height": h, 'perimeter': (x, y, w, h)}
 
         else:
@@ -278,11 +281,16 @@ def detect_shapes(image, duplicate_threshold=6, delta=5, show_output=True):
 
 def generate_output_html(data, filename):
     rendering_data = {
-        "rectangle": {
+        "rectangle1": {
             "input_type": """<input type="text" class="form-control" placeholder="rectangle" aria-label="" aria-describedby="">""", 
             "name":"Text Input"
             },
         
+        "rectangle2": {
+            "input_type": """<textarea class="form-control" id="" rows="3"></textarea>""", 
+            "name":"Text Input"
+            },
+
         "square"   : {
             'input_type': """<input class="form-check-input" type="checkbox" value="" id="">""",
             'name':'Checkbox'
@@ -300,9 +308,15 @@ def generate_output_html(data, filename):
     for keys in data.keys():
         form_data += """\n\t\t\t<div class="row mb-3">"""
         for element in data[keys]:
-            input_data = rendering_data[element['shape']]['input_type']
+            shape = element['shape']
+            if shape == "circle":
+                column_width = 'auto'
+            else:
+                shape_width = element['width']
+                column_width = math.ceil(float(shape_width/400) * 12)
+            input_data = rendering_data[shape]['input_type']
             form_data += f"""
-                <div class="col">
+                <div class="col-{column_width}">
                     <label for="" class="form-label">{rendering_data[element['shape']]['name']}</label>
                     {input_data}
                 </div>

@@ -132,9 +132,12 @@ parameters: the shape data and the output filename.
 The steps in this stage are quite simple. Since the shape data is a dictionary with each row as a key and a list of shapes sorted from left
 to right, the input field generation process is fairly straightforward.
 First, we create a string with boilerplate html with bootstrap css and js included. Then for each row (which is a key in the shape dict), 
-create a parent div with class row (bootstrap class) and plae each shape in a child div with class col (Another bootstrap classs). This way, 
-all elements of a row are placed from left to right (depending on the amount of available space). Another potential improvement would be to 
-use the width of each shape in a row to determine the amount of column space it takes up.
+create a parent div with class row (bootstrap class) and plae each shape in a child div with class col (Another bootstrap classs). The width
+of the shape determines how many columns the input would take up. More specifically, the width of a column is computed using the formula:
+column_width = (image_shape / 400) * 12. 400 was used here as it is the maximum width of my opencv window and 12 is the maximum number of
+columns that a bootstrap row can contain. More info can be found here: https://getbootstrap.com/docs/4.0/layout/grid/.
+So far I've only tested images with a maximum of 5 inputs (radio buttons) on one column and it seems to work fine. Feel free to test further
+and raise any issues as pull requests.
 After placing the inputs, the final thing to do is to save the html to a file and we're all done. 
 
 Congratulations, we have a decent way of automatically creating forms.
@@ -144,12 +147,11 @@ Credits:
 2. OpenCv 4.x documentation (https://docs.opencv.org/4.x/index.html)
 3. https://realpython.com/sorting-algorithms-python/
 4. All the unsung heroes of stackoverflow
+5. Bootstrap documentation (https://getbootstrap.com/docs/4.0/layout/grid/)
 
 POTENTIAL IMPROVEMENTS:
 1. Improiving detection in lower contrast images
-2. Using shape dimensions to determine the type of input (specifically using rectangle height to determine text inputs vs textarea)
-3. Determining column width in output html based on shape width.
-4. Recognizing shapes with border radius.
+2. Recognizing shapes with border radius.
 
 Feel free to add suggestions by creating pull requests. Cheers!!!
 
