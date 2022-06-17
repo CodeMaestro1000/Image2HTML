@@ -3,13 +3,15 @@ This document gives an overview of how this application was built. The workflow 
 2. Detect all shapes drawn on the paper
 3. Use these shapes to create a inputs for a form
 
+All the functions used can be found in the functions.py file
+
 
 1. Obtaining the Region of Interest:
 The first stage of the workflow is to detect and select only the region of interest (the paper in this case) from the input image and 
 transform it to give a top-down view. This step can be skipped if you don't need to crop the image but it is recommended you do so. To obtain
 useful results, it is recommended that you place the paper on a contrasting (dark) background before taking the photo.
 
-This first stage is further divided into three steps. Each step is part of the get_top_down_view function in the transform.py file. This 
+This first stage is further divided into three steps. Each step is part of the get_top_down_view function. This 
 function  takes two inputs: the imput image and show_output_value which for choosing to display intermediate outputs. The steps are as 
 follows:
 
@@ -62,8 +64,8 @@ The next stage is detecting and determining the shape(s) in the transformed imag
 2. Shape Detection
 After obtaining our region of interest, the next stage of the workflow is detecting shapes in the image. Before performing the shape 
 detection, the image should be converted to grayscale (if it is colored) and gaussian smoothing applied. I added this pre-processing step 
-just in case the first stage of the workflow was skipped. Everything done in this stage was implemented in the detect_shapes function in 
-shape_detector.py. This function takes three arguments: 
+just in case the first stage of the workflow was skipped. Everything done in this stage was implemented in the detect_shapes function. This 
+function takes three arguments: 
 a. the input image
 b. duplicate_threshold which is a value for flagging shapes as duplicates
 c. delta which a value used for placing shapes into rows.
@@ -124,8 +126,8 @@ detection stage. Before proceeding, I'd like to point out some assumptions that 
 All rectangles are assumed to be text inputs, circles are radio buttons and squares are checkboxes. A nice improvement on this would be to
 create textarea input fields based on the rectangle dimensions.
 
-Moving on, the entire implementation of this stage can be found in the generate_output_html function in the form_generator.py file. This
-function takes two parameters: the shape data and the output filename.
+Moving on, the entire implementation of this stage can be found in the generate_output_html function in the. This function takes two 
+parameters: the shape data and the output filename.
 
 The steps in this stage are quite simple. Since the shape data is a dictionary with each row as a key and a list of shapes sorted from left
 to right, the input field generation process is fairly straightforward.
